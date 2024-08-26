@@ -13,20 +13,25 @@ const { data: transcriptions, refresh } = await useFetch('/api/files')
 
 async function uploadFile() {
 
+  if (!files.value.length) {
+    return toast.add({ title: 'No files selected', color: 'red' })
+  }
+
 
   loading.value = true
   console.log("submitting files")
 
   try {
 
-    const todo = await $fetch('/api/files', {
+    const file = await $fetch('/api/files', {
       method: 'POST',
       body: {
         files: files.value
       }
     })
     await refresh()
-    toast.add({ title: `Transcriptions for "${todo.fileName}" created.` })
+    // console.log(file)
+    toast.add({ title: `Transcriptions for "${file[0].fileName}" created.` })
     fileInput.value.value = '' // Clear the file input
   }
   catch (err) {
