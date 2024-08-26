@@ -94,6 +94,14 @@ const items = [[{
   icon: 'i-heroicons-arrow-left-on-rectangle',
   click: clear
 }]]
+
+
+async function setClipboard(text) {
+  const type = "text/plain";
+  const blob = new Blob([text], { type });
+  const data = [new ClipboardItem({ [type]: blob })];
+  await navigator.clipboard.write(data);
+}
 </script>
 
 <template>
@@ -124,14 +132,10 @@ const items = [[{
           <UButton color="red" variant="ghost" size="2xs" icon="i-heroicons-x-mark-20-solid"
             @click="deleteTodo(todo)" />
 
-          <UButton color="" variant="" size="2xs" icon="i-heroicons-clipboard-20-solid" @click="() => {
+          <UButton color="" variant="" size="2xs" icon="i-heroicons-clipboard-20-solid" @click="async () => {
             // if (!navigator.clipboard) return alert(transcript.transcription)
             // navigator.clipboard.writeText(transcript.transcription)
-            if (navigator && navigator.clipboard) {
-              navigator.clipboard.writeText(transcript.transcription)
-            } else {
-              console.log(transcript.transcription)
-            }
+            await setClipboard(transcript.transcription)
             toast.add({ title: 'Copied to clipboard' })
           }" />
         </div>
