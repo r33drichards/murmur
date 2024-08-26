@@ -11,6 +11,19 @@ const toast = useToast()
 const { user, clear } = useUserSession()
 const { data: transcriptions, refresh } = await useFetch('/api/files')
 
+
+const refreshing = ref(false)
+async function refreshData() {
+  refreshing.value = true
+  await refresh()
+  refreshing.value = false
+}
+
+// every 3 seconds refresh the data
+onNuxtReady(async () => {
+  setInterval(refresh, 3000)
+})
+
 async function uploadFile() {
 
   if (!files.value.length) {
@@ -86,6 +99,11 @@ async function setClipboard(text) {
         ref="fileInput" @input="handleFileInput" />
       <UButton type="submit" icon="i-heroicons-cloud-arrow-up-20-solid" :loading="loading" size="xl"
         @click="uploadFile" />
+    </div>
+
+    <!-- align refresh button to the right -->
+    <div class="flex justify-end">
+      <UButton icon="i-heroicons-arrow-path" @click="refreshData" variant="ghost" :loading="refreshing"/>
     </div>
 
     <ul class="divide-y divide-gray-200 dark:divide-gray-800 ">

@@ -11,7 +11,7 @@ export default eventHandler(async (event) => {
     method: 'GET',
     params: {
       offset: '0',
-      limit: '25',
+      limit: '500',
       where: '',
       viewId: 'vwrrvvm1st1mdwxj'
     },
@@ -22,7 +22,6 @@ export default eventHandler(async (event) => {
 
   // Extract the transcription data
   const transcriptions = nocodbResponse.list; // Assuming the list of records is under the 'list' key in the response
-
   // Match transcriptions with files based on name
   const result = files.map(file => {
     const matchingTranscription = transcriptions.find(transcription => transcription.name === file.data.name);
