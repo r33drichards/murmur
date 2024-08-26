@@ -91,6 +91,8 @@ async function setClipboard(text) {
             {{ user.login }}
           </UButton>
         </UDropdown>
+
+    <!-- align refresh button to the right -->
       </div>
     </template>
 
@@ -101,10 +103,6 @@ async function setClipboard(text) {
         @click="uploadFile" />
     </div>
 
-    <!-- align refresh button to the right -->
-    <div class="flex justify-end">
-      <UButton icon="i-heroicons-arrow-path" @click="refreshData" variant="ghost" :loading="refreshing"/>
-    </div>
 
     <ul class="divide-y divide-gray-200 dark:divide-gray-800 ">
 
@@ -124,7 +122,7 @@ async function setClipboard(text) {
 
         <span class="flex-1 font-dark">
           {{ transcript.fileName }}</span>
-        <p truncate class="flex-1 font-light" variant="ghost">
+        <p truncate class="flex-1 font-light " variant="ghost">
           {{ transcript.transcription }}</p>
       </li>
     </ul>

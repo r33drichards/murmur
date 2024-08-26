@@ -27,9 +27,25 @@ export default eventHandler(async (event) => {
     const matchingTranscription = transcriptions.find(transcription => transcription.name === file.data.name);
     return {
       ...file,
-      transcription: matchingTranscription ? matchingTranscription.transcription : "Transcribing, please wait..."
+      transcription: matchingTranscription ? matchingTranscription.transcription : "Transcribing, please wait... " + timeSinceCreationMinutesSeconds(file.createdAt),
+      // timeSinceCreation: 
     };
   });
 
   return result;
 });
+
+
+function timeSinceCreationMinutesSeconds(createdAt) {
+  const now = Date.now();
+  const diff = now - createdAt;
+
+  const minutes = Math.floor(diff / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+
+  // Ensure minutes and seconds are two digits
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = seconds.toString().padStart(2, '0');
+
+  return `${formattedMinutes}:${formattedSeconds}`;
+}
