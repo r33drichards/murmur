@@ -7,14 +7,13 @@ const table_id = 'm8tznx3ib22iy6w';
 const baseUrl = 'https://nocodb-production-7b27.up.railway.app/api/v2';
 
 // Function to insert image
-async function insertImage(file: File) {
+async function insertImage(file: File, config) {
   console.log('inserting file:', file.name);
   // Parses a data URL and returns an object with the binary data and the file extension.
   const { binaryString, ext } = parseDataUrl(file.content)
   const formData = new FormData();
   formData.append('file', new Blob([binaryString],), file.name);
 
-  const config = await useRuntimeConfig();
   try {
     const response = await $fetch(`${baseUrl}/storage/upload`, {
       method: 'POST',
@@ -32,12 +31,11 @@ async function insertImage(file: File) {
 }
 
 // Function to insert record with attachment
-async function uploadFile(file: File, user: User) {
+async function uploadFile(file: File, user: User, config) {
   const name = uuidv4();
-  const config = await useRuntimeConfig();
 
   try {
-    let attachmentData = await insertImage(file);
+    let attachmentData = await insertImage(file, config);
     let row = {
       name,
       "user": user.id,
@@ -62,13 +60,15 @@ export default eventHandler(async (event) => {
   const { user } = await requireUserSession(event);
   const { files } = await readBody(event);
   const results = [];
+  const config = await useRuntimeConfig();
+
 
   console.log(user.id)
 
   for (const file of files) {
     try {
       console.log('Uploading file:', file.name);
-      const result = await uploadFile(file, user);
+      const result = await uploadFile(file, user, config);
       const db = await useDB();
       const item = await db.insert(tables.files).values(
         {
