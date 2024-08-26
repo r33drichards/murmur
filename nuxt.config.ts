@@ -5,7 +5,8 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     '@nuxt/ui',
     'nuxt-auth-utils',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    'nuxt-file-storage',
   ],
   hub: {
     database: true
@@ -21,5 +22,9 @@ export default defineNuxtConfig({
   },
   devtools: {
     enabled: true
-  }
+  },
+  runtimeConfig: {
+    nocodbToken: "", // can be overridden by NUXT_NOCODB_TOKEN env variable
+  },
+
 })

@@ -33,7 +33,7 @@ Create a [GitHub Oauth Application](https://github.com/settings/applications/new
 Add the variables in the `.env` file:
 
 ```bash
-NUXT_OAUTH_GITHUB_CLIENT_ID="my-github-oauth-app-id"
+NUXT_OAUTH_GITHUB_CLIENT_ID="Ov23linisvlfGE1bzImu"
 NUXT_OAUTH_GITHUB_CLIENT_SECRET="my-github-oauth-app-secret"
 ```
 
