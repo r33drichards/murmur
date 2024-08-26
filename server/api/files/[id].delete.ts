@@ -1,22 +1,22 @@
 import { eq, and } from 'drizzle-orm'
-import { useValidatedParams, zh } from 'h3-zod'
+import { useValidatedParams, z } from 'h3-zod'
 
 export default eventHandler(async (event) => {
   const { id } = await useValidatedParams(event, {
-    id: zh.intAsString
+    id: z.string().uuid()
   })
   const { user } = await requireUserSession(event)
 
   // List todos for the current user
-  const deletedTodo = await useDB().delete(tables.todos).where(and(
-    eq(tables.todos.id, id),
-    eq(tables.todos.userId, user.id)
+  const deletedTodo = await useDB().delete(tables.files).where(and(
+    eq(tables.files.id, id),
+    eq(tables.files.userId, user.id)
   )).returning().get()
 
   if (!deletedTodo) {
     throw createError({
       statusCode: 404,
-      message: 'Todo not found'
+      message: 'File not found'
     })
   }
   return deletedTodo

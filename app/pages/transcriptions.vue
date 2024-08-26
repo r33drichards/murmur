@@ -25,9 +25,8 @@ async function uploadFile() {
         files: files.value
       }
     })
-    todos.value.push(todo)
     await refresh()
-    toast.add({ title: `Transcriptions for "${todo.title}" created.` })
+    toast.add({ title: `Transcriptions for "${todo.fileName}" created.` })
     fileInput.value.value = '' // Clear the file input
   }
   catch (err) {
@@ -41,52 +40,12 @@ async function uploadFile() {
   loading.value = false
 }
 
-async function addTodo() {
-  if (!newTodo.value.trim()) return uploadFile()
 
-  loading.value = true
-
-  try {
-    const todo = await $fetch('/api/todos', {
-      method: 'POST',
-      body: {
-        title: newTodo.value,
-        completed: 0
-      }
-    })
-    todos.value.push(todo)
-    await refresh()
-    toast.add({ title: `Todo "${todo.title}" created.` })
-    newTodo.value = ''
-    nextTick(() => {
-      newTodoInput.value?.input?.focus()
-    })
-  }
-  catch (err) {
-    if (err.data?.data?.issues) {
-      const title = err.data.data.issues.map(issue => issue.message).join('\n')
-      toast.add({ title, color: 'red' })
-    }
-  }
-  loading.value = false
-}
-
-async function toggleTodo(todo) {
-  todo.completed = Number(!todo.completed)
-  await $fetch(`/api/todos/${todo.id}`, {
-    method: 'PATCH',
-    body: {
-      completed: todo.completed
-    }
-  })
+async function deleteTranscript(transcript) {
+  await $fetch(`/api/files/${transcript.id}`, { method: 'DELETE' })
+  transcriptions.value = transcriptions.value.filter(t => t.id !== transcript.id)
   await refresh()
-}
-
-async function deleteTodo(todo) {
-  await $fetch(`/api/todos/${todo.id}`, { method: 'DELETE' })
-  todos.value = todos.value.filter(t => t.id !== todo.id)
-  await refresh()
-  toast.add({ title: `Todo "${todo.title}" deleted.` })
+  toast.add({ title: `Transcription for "${transcript.fileName}" deleted.` })
 }
 
 const items = [[{
@@ -130,7 +89,7 @@ async function setClipboard(text) {
         <div>
 
           <UButton color="red" variant="ghost" size="2xs" icon="i-heroicons-x-mark-20-solid"
-            @click="deleteTodo(todo)" />
+            @click="deleteTranscript(transcript)" />
 
           <UButton color="" variant="" size="2xs" icon="i-heroicons-clipboard-20-solid" @click="async () => {
             // if (!navigator.clipboard) return alert(transcript.transcription)
