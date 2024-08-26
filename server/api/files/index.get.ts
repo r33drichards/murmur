@@ -5,7 +5,7 @@ export default eventHandler(async (event) => {
   
   // Fetch files from your database
   const files = await useDB().select().from(tables.files).where(eq(tables.files.userId, user.id)).all();
-  const config = await useRuntimeConfig();
+  const config = await useRuntimeConfig(event);
   // Fetch transcriptions from NocoDB
   const nocodbResponse = await $fetch('https://nocodb-production-7b27.up.railway.app/api/v2/tables/mvjv4skq7qyynxa/records', {
     method: 'GET',
