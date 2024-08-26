@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     enabled: true
   },
   runtimeConfig: {
-    nocodbToken: "", // can be overridden by NUXT_NOCODB_TOKEN env variable
+    nocodbToken: process.env.NUXT_NOCODB_TOKEN, // can be overridden by NUXT_NOCODB_TOKEN env variable
   },
 
 })
